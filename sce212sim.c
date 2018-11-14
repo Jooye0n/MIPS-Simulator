@@ -129,24 +129,24 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    initialize(argv[argc-1]);
+    initialize(argv[argc-1]); // filename 받고 메모리영역 초기화후 load program
 
     //for checking parse result
-    //print_parse_result();
+    // print_parse_result(); // 분석 결과 체크하기 위한 함수
 
     while (count != argc-1) {
 
         if (strcmp(argv[count], "-m") == 0) {
-            tokens = str_split(argv[++count],':');
+            tokens = str_split(argv[++count],':');  // -m 필드에서받은 주소 각각 addr1, addr2에 저장후 mem_dump_set = 1 셋팅
 
             addr1 = (int)strtol(*(tokens), NULL, 16);
             addr2 = (int)strtol(*(tokens+1), NULL, 16);
             mem_dump_set = 1;
 
-        } else if(strcmp(argv[count], "-d") == 0) {
+        } else if(strcmp(argv[count], "-d") == 0) {  // -d 필드 있으면 debug_set = 1 셋팅
             debug_set = 1;
 
-        } else if(strcmp(argv[count], "-n") == 0) {
+        } else if(strcmp(argv[count], "-n") == 0) { // -n 카운트에서 받은 숫자 nun_inst에 셋팅후 nun_inst_set=1 셋팅
             num_inst = (int)strtol(argv[++count], NULL, 10);
             num_inst_set = 1;
 
@@ -155,29 +155,29 @@ int main(int argc, char *argv[]) {
             exit(1);
         }
         count++;
-    }
+    }  //while 문 끝
 
     if (num_inst_set) {
-        i = num_inst;
+        i = num_inst;       // n번 돌리기위해 i=100에 n값 덮어씀
     }
 
-    if (debug_set) {
+    if (debug_set) {        // -d, 디버깅 모드 일때 
         printf("Simulating for %d cycles...\n\n", i);
 
-        for(; i > 0; i--){
-            cycle();
-            rdump();
+        for(; i > 0; i--){  // n번 돌린것을 모두 보여줌으로써 디버깅하기위함
+            cycle();    //n번의 process_instruction 출력
+            rdump();    //n번의 rdump 출력
 
-            if (mem_dump_set) {
-                mdump(addr1, addr2);
+            if (mem_dump_set) {     // -m 필드했으면 mdump한다
+                mdump(addr1, addr2); //n번 출력
             }
-        }
+        }  //n번의 for문 종료
 
-    } else {
-        run(i);
-        rdump();
+    } else {        // 디버깅모드 아닐때
+        run(i);     
+        rdump();    // n번 돌린값을 1회 출력
 
-        if (mem_dump_set) {
+        if (mem_dump_set) {     // -m 필드했으면 mdump한다
             mdump(addr1, addr2);
         }
     }

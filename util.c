@@ -163,9 +163,9 @@ void mem_write_32(uint32_t address, uint32_t value)
 void cycle() {
 
     process_instruction();
-    INSTRUCTION_COUNT++;
+    INSTRUCTION_COUNT++;  //아래 주석줄 디버깅할때 쓰기위한 변수
 
-    //for debug
+    //for debug         // 디버깅할려면 써라 @@@@@@@
     //printf("%2d - Current PC: %x\n", INSTRUCTION_COUNT, CURRENT_STATE.PC);
 }
 
@@ -185,12 +185,12 @@ void run(int num_cycles) {
     }
 
     printf("Simulating for %d cycles...\n\n", num_cycles);
-    for (i = 0; i < num_cycles; i++) {
+    for (i = 0; i < num_cycles; i++) {   //n번 for문
         if (RUN_BIT == FALSE) {
             printf("Simulator halted\n\n");
             break;
         }
-        cycle();
+        cycle();                // n번 사이클
     }
 }
 
@@ -203,13 +203,13 @@ void run(int num_cycles) {
 /***************************************************************/
 void go() {
     if (RUN_BIT == FALSE) {
-	printf("Can't simulate, Simulator is halted\n\n");
-	return;
+	   printf("Can't simulate, Simulator is halted\n\n");
+	   return;
     }
 
     printf("Simulating...\n\n");
     while (RUN_BIT)
-	cycle();
+	   cycle();
     printf("Simulator halted\n\n");
 }
 

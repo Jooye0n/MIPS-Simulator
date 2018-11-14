@@ -41,7 +41,7 @@ typedef struct CPU_State_Struct {
 /* You should decode your instructions from the
  * ASCII-binary format to this structured format */
 typedef struct inst_s {
-    short opcode;
+    short opcode;   //short 2 바이트 정수형
 
     /*R-type*/
     short func_code;
