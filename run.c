@@ -33,6 +33,22 @@ instruction* get_inst_info(uint32_t pc)
 /*                                                             */
 /***************************************************************/
 void process_instruction()
-{
-	/** Implement this function */
+{	
+	instruction *instr = get_inst_info(CURRENT_STATE.PC);
+	if(instr->opcode == 0){ 		//	R type
+	}
+		// CURRENT_STATE.REGS[0]++;
+
+
+
+
+
+
+
+
+
+	CURRENT_STATE.PC += 4;	
+	if((CURRENT_STATE.PC - MEM_TEXT_START)/4 == NUM_INST){
+		RUN_BIT=FALSE;
+	}
 }
