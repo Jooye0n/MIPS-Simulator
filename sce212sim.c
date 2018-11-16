@@ -163,6 +163,7 @@ int main(int argc, char *argv[]) {
 
     if (debug_set) {        // -d, 디버깅 모드 일때 
         printf("Simulating for %d cycles...\n\n", i);
+        print_parse_result();  //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 나중에 지울 것
 
         for(; i > 0; i--){  // n번 돌린것을 모두 보여줌으로써 디버깅하기위함
             cycle();    //n번의 process_instruction 출력

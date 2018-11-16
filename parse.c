@@ -19,7 +19,51 @@ int data_size;
 instruction parsing_instr(const char *buffer, const int index)
 {
     instruction instr;
-	/** Implement this function */
+    mem_write_32(MEM_TEXT_START+index, fromBinary((char*)buffer));
+    instr.value=fromBinary((char*)buffer);
+
+    char buf[7];
+    strncpy(buf, buffer, 6);
+    buf[6]='\0';
+    instr.opcode=fromBinary(buf);
+    // printf("op:%d\n", fromBinary(op));
+
+    if(fromBinary(buf)==0){ // R type
+        strncpy(buf, buffer+6, 5);
+        buf[5]='\0';
+        instr.r_t.r_i.rs=fromBinary(buf);
+
+        strncpy(buf, buffer+11, 5);
+        buf[5]='\0';
+        instr.r_t.r_i.rt=fromBinary(buf);
+
+        strncpy(buf, buffer+16, 5);
+        buf[5]='\0';
+        instr.r_t.r_i.r_i.r.rd=fromBinary(buf);
+
+        strncpy(buf, buffer+21, 5);
+        buf[5]='\0';
+        instr.r_t.r_i.r_i.r.shamt=fromBinary(buf);
+
+        strncpy(buf, buffer+26, 6);
+        buf[6]='\0';
+        instr.func_code=fromBinary(buf);
+    }
+    else if(fromBinary(buf)==2 || fromBinary(buf)==3){ // J type
+        instr.r_t.target=fromBinary((char*)buffer+6);
+    }
+    else{   // I Type
+        strncpy(buf, buffer+6, 5);
+        buf[5]='\0';
+        instr.r_t.r_i.rs=fromBinary(buf);       
+
+        strncpy(buf, buffer+11, 5);
+        buf[5]='\0';
+        instr.r_t.r_i.rt=fromBinary(buf);
+
+        instr.r_t.r_i.r_i.imm=fromBinary((char*)buffer+16);
+    }
+
     return instr;
 }
 
@@ -36,7 +80,7 @@ void print_parse_result()
 
     for(i = 0; i < text_size/4; i++)
     {
-        printf("INST_INFO[%d].value : %x\n",i, INST_INFO[i].value);
+        // printf("INST_INFO[%d].value : %x\n",i, INST_INFO[i].value);
         printf("INST_INFO[%d].opcode : %d\n",i, INST_INFO[i].opcode);
 
 	    switch(INST_INFO[i].opcode)
@@ -76,6 +120,8 @@ void print_parse_result()
                 assert(0);
         }
     }
+
+    // return; // @@@@@@@@@@@@@@@@@@@@ 나중에 지우기
 
     printf("Memory Dump - Text Segment\n");
     for(i = 0; i < text_size; i+=4)
