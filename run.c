@@ -64,31 +64,49 @@ void process_instruction()
 		funct=FUNC(instr);
 
 		if(funct==0x21){	// addu
-			printf("Im addu\n");
+			// printf("Im addu\n");
+			//R[rd] = R[rs] + R[rt]
+			cpu->REGS[rd] = cpu->REGS[rs] + cpu->REGS[rt];
 		}
 		else if(funct==0x24){	//and
-			printf("Im and\n");
+			// printf("Im and\n");
+			//R[rd] = R[rs] & R[rt]
+			cpu->REGS[rd] = cpu->REGS[rs] & cpu->REGS[rt];
 		}
 		else if(funct==0x8){	//jr
-			printf("Im jr\n");
+			// printf("Im jr\n");
+			//PC=R[rs]
+			CURRENT_STATE.PC = cpu->REGS[rs];
 		}
 		else if(funct==0x27){	//nor
-			printf("Im nor\n");
+			// printf("Im nor\n");
+			//R[rd] = ~ (R[rs] | R[rt])
+			cpu->REGS[rd] = ~(cpu->REGS[rs] | cpu->REGS[rt]);
 		}
 		else if(funct==0x25){	//or
-			printf("Im or\n");
+			// printf("Im or\n");
+			//R[rd] = R[rs] | R[rt]
+			cpu->REGS[rd] = cpu->REGS[rs] | cpu->REGS[rt];
 		}
 		else if(funct==0x2b){	//sltu
-			printf("Im sltu\n");
+			// printf("Im sltu\n");
+			//R[rd] = (R[rs] < R[rt]) ? 1 : 0
+			cpu->REGS[rd] = (cpu->REGS[rs] < cpu->REGS[rt]) ? 1:0;
 		}
 		else if(funct==0x0){	//sll
-			printf("Im sll\n");
+			// printf("Im sll\n");
+			//R[rd] = R[rt] << shamt
+			cpu->REGS[rd] = cpu->REGS[rt] << shamt;
 		}
 		else if(funct==0x2){	//srl
-			printf("Im srl\n");
+			// printf("Im srl\n");
+			//R[rd] = R[rt] >> shamt
+			cpu->REGS[rd] = cpu->REGS[rt] >> shamt;
 		}
 		else if(funct==0x23){	//subu
-			printf("Im subu\n");
+			// printf("Im subu\n");
+			//R[rd] = R[rs] - R[rt]
+			cpu->REGS[rd] = cpu->REGS[rs] - cpu->REGS[rt];
 		}
 		else{
 			printf("R type: exception occured.\n");
@@ -96,13 +114,17 @@ void process_instruction()
 
 	}
 	else if(opcode==2 || opcode==3){ // J type
-		target = TARGET(instr);
-		
+		target = 4*TARGET(instr);
 		if(opcode==2){		//	j
-			printf("Im j\n");
+			// printf("Im j\n");
+			//PC=JumpAddr
+			CURRENT_STATE.PC = target;
 		}
 		else if(opcode==3){	// jal
-			printf("Im jal\n");
+			// printf("Im jal\n");
+			//R[31]=PC+8;PC=JumpAddr
+			cpu->REGS[31] = CURRENT_STATE.PC + 4;
+			CURRENT_STATE.PC = target;
 		}
 		else{
 			printf("J type: exception occured.\n");
@@ -114,31 +136,51 @@ void process_instruction()
 		imm=IMM(instr);	
 
 		if(opcode==0x9){	//	addiu
-			printf("Im addiu\n");
+			// printf("Im addiu\n");
+			//R[rt] = R[rs] + SignExtImm
+			cpu->REGS[rt] = cpu->REGS[rs] + SIGN_EX(imm);
 		}			
 		else if(opcode==0xc){	//	andi
-			printf("Im andi\n");
+			// printf("Im andi\n");
+			//R[rt] = R[rs] & ZeroExtImm
+			cpu->REGS[rt] = cpu->REGS[rs] & (imm | 0x00000000);
 		}
 		else if(opcode==0x4){	//	beq
-			printf("Im beq\n");
+			// printf("Im beq\n");
+			//if(R[rs]==R[rt]) PC=PC+4+BranchAddr    //BranchAddr: { 14{immediate[15]}, immediate, 2’b0 }
+			if(cpu->REGS[rs] == cpu->REGS[rt]){
+				CURRENT_STATE.PC += (SIGN_EX(imm)<<2);
+			}
+			// printf("0x%08x\n", CURRENT_STATE.PC);
 		}
 		else if(opcode==0x5){	//	bne
-			printf("Im bne\n");
+			// printf("Im bne\n");
+			//if(R[rs]!=R[rt]) PC=PC+4+BranchAddr
+			if(cpu->REGS[rs] != cpu->REGS[rt]){
+				CURRENT_STATE.PC += (SIGN_EX(imm)<<2);
+			}
 		}
 		else if(opcode==0xf){	//	lui
-			printf("Im lui\n");
+			// printf("Im lui\n");
+			//R[rt] = {imm, 16’b0}
+			cpu->REGS[rt] = imm>>16;
 		}
 		else if(opcode==0x23){	//	lw
-			printf("Im lw\n");
+			// printf("Im lw\n");
+
 		}
 		else if(opcode==0xd){	//	ori
-			printf("Im ori\n");
+			// printf("Im ori\n");
+			//R[rt] = R[rs] | ZeroExtImm
+			cpu->REGS[rt] = cpu->REGS[rs] | (imm | 0x00000000);
 		}
 		else if(opcode==0xb){	//	sltiu
-			printf("Im sltiu\n");
+			// printf("Im sltiu\n");
+			//R[rt] = (R[rs] < SignExtImm) ? 1 : 0
+			cpu->REGS[rt] = (cpu->REGS[rs] < SIGN_EX(imm)) ? 1:0;
 		}
 		else if(opcode==0x2b){	//	sw
-			printf("Im sw\n");
+			// printf("Im sw\n");
 		}
 		else{
 			printf("I type: exception occured.\n");
