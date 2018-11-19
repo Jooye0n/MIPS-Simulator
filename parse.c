@@ -26,7 +26,6 @@ instruction parsing_instr(const char *buffer, const int index)
     strncpy(buf, buffer, 6);
     buf[6]='\0';
     instr.opcode=fromBinary(buf);
-    // printf("op:%d\n", fromBinary(op));
 
     if(fromBinary(buf)==0){ // R type
         strncpy(buf, buffer+6, 5);
@@ -69,7 +68,6 @@ instruction parsing_instr(const char *buffer, const int index)
 
 void parsing_data(const char *buffer, const int index)  // index 4씩 증가함, buffer는 32비트 한개 워드 전체
 {
-	/** Implement this function */
     mem_write_32(MEM_DATA_START+index, fromBinary((char *)buffer));
 }
 
