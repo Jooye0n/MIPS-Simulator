@@ -163,11 +163,15 @@ void process_instruction()
 		else if(opcode==0xf){	//	lui
 			// printf("Im lui\n");
 			//R[rt] = {imm, 16’b0}
-			cpu->REGS[rt] = imm>>16;
+			cpu->REGS[rt] = imm<<16;
 		}
 		else if(opcode==0x23){	//	lw
 			// printf("Im lw\n");
+			//R[rt] = M[R[rs]+SignExtImm]
 
+			//uint32_t mem_read_32(uint32_t address)
+
+			cpu->REGS[rt] = mem_read_32(cpu->REGS[rs] + SIGN_EX(imm));
 		}
 		else if(opcode==0xd){	//	ori
 			// printf("Im ori\n");
@@ -181,6 +185,9 @@ void process_instruction()
 		}
 		else if(opcode==0x2b){	//	sw
 			// printf("Im sw\n");
+			// M[R[rs]+SignExtImm] = R[rt]
+			// void mem_write_32(uint32_t address, uint32_t value)
+			mem_write_32(cpu->REGS[rs] + SIGN_EX(imm), cpu->REGS[rt]);
 		}
 		else{
 			printf("I type: exception occured.\n");
