@@ -1,0 +1,13 @@
+Minhyung Kim (8):
+      parsing_data implemented, other files: user friendly comment added
+      instruction & data are parsed (Hopefully)
+      Implementing process_instruction()..
+      run.c: filtered all instruction by opcode
+      example 4, fact ,leaf passed
+      All passed (LW, SW implemented and there was error in lui, but fixed)
+      Final submission
+      Final submission
+
+Wonkyo Choe (1):
+      Initial commit
+
