@@ -47,6 +47,12 @@ void process_instruction()
     uint32_t target;
     short funct;
 
+    printf("current instruction: %x\n", opcode);
+    if(opcode==0){
+    	 printf("current function %x\n", funct);
+    }
+
+
 	if(opcode == 0){ 	 // R type	
 		rs=RS(instr);
 		rt=RT(instr);
@@ -97,8 +103,6 @@ void process_instruction()
 		else if(opcode==0x2b) mem_write_32(cpu->REGS[rs] + SIGN_EX(imm), cpu->REGS[rt]); //sw
 		else printf("I type: exception occured.\n");
 	}
-
-
 
 
 // ===================do not touch the below=========================

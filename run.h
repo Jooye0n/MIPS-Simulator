@@ -77,7 +77,7 @@
 #define SET_SOURCE(INST, VAL)	(INST)->source_line = (char *)(VAL)
 
 /* Sign Extension */
-#define SIGN_EX(X) (((X) & 0x8000) ? ((X) | 0xffff0000) : (X))
+#define SIGN_EX(X) (( (X) & 0x8000 ) ? ( (X) | 0xffff0000 ) : (X))
 
 #define COND_UN		0x1
 #define COND_EQ		0x2

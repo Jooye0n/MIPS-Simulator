@@ -52,15 +52,15 @@ typedef struct inst_s {
 	    unsigned char rs;
 	    unsigned char rt;
 
-	    union {
-	        short imm;
+	        union {
+	            short imm;
 
-	        struct {
-		    unsigned char rd;
-		    unsigned char shamt;
-		} r;
+	            struct {
+		            unsigned char rd;
+		            unsigned char shamt;
+		        } r;
+	        } r_i;
 	    } r_i;
-	} r_i;
         /* J-type: */
         uint32_t target;
     } r_t;
